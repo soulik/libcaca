@@ -100,4 +100,5 @@ src/img2txt
 tools/optipal
 tools/makefont
 tools/sortchars
+build/*
 
