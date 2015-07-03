@@ -54,11 +54,15 @@
 #   endif
 #   if defined _WIN64
         /* Win64, (u)intptr_t and size_t are present */
-        typedef int ssize_t;
+#ifndef ssize_t 
+			typedef int ssize_t;
+#endif
 #   else
         /* Win32, only (u)intptr_t is present */
-        typedef int ssize_t;
-        typedef unsigned int size_t;
+#ifndef ssize_t 
+		typedef int ssize_t;
+#endif
+		typedef unsigned int size_t;
 #   endif
 #endif
 

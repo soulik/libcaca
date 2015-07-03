@@ -19,6 +19,7 @@ set(CACAlib_src
 	attr.c
 	box.c
 	caca.c
+	caca0.c
 	caca_conio.c
 	canvas.c
 	charset.c
@@ -41,6 +42,7 @@ set(CACAlib_src
 	triangle.c
     codec/codec.h
     caca.h
+    caca0.h
     caca_conio.h
     caca_debug.h
     caca_internals.h

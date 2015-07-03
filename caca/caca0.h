@@ -145,7 +145,17 @@ enum caca_feature
 #define caca_get_color_name __caca0_get_color_name
 #define caca_putchar(x, y, c) caca_put_char(__caca0_cv, x, y, c)
 #define caca_putstr(x, y, s) caca_put_str(__caca0_cv, x, y, s)
+
+#ifdef _MSC_VER
+
+#define caca_printf(x, y, f, ...) caca_printf(__caca0_cv, x, y, f, __VA_ARGS__)
+
+#else
+
 #define caca_printf(x, y, f, z...) caca_printf(__caca0_cv, x, y, f, ##z)
+
+#endif
+
 #define caca_clear() caca_clear_canvas(__caca0_cv)
 
 #define caca_draw_line(x, y, z, t, c) \
