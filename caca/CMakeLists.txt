@@ -18,6 +18,7 @@ set(CACAlib_src
     codec/text.c
 	attr.c
 	box.c
+	caca0.c
 	caca.c
 	caca0.c
 	caca_conio.c
@@ -69,12 +70,29 @@ if (X11_X11_LIB)
 endif()
 
 if (OPENGL_FOUND)
-	set(USE_GL ON CACHE BOOL "Enable support for X11 video driver")
-	if (USE_GL)
-		list(APPEND CACAlib_LIBRARIES
-			${OPENGL_LIBRARIES}
-		)
-		include_directories( ${OPENGL_INCLUDE_DIR})
+	find_path(OPENGL_GLUT_H NAMES GL/glut.h
+		DOC "GLut include files"
+	)
+	
+	find_library(OPENGL_GLUT_LIBRARY
+		NAMES glut
+	)
+
+	if (OPENGL_GLUT_H AND OPENGL_GLUT_LIBRARY)
+		set(PENGL_GLUT_FOUND 1)
+	endif()
+
+	set(HAVE_GL_GL_H 1)
+	#set(HAVE_OPENGL_GL_H 1)
+	if (OPENGL_GLUT_FOUND)
+		set(HAVE_GL_GLUT_H 1)
+		set(USE_GL ON CACHE BOOL "Enable support for OpenGL video driver")
+		if (USE_GL)
+			list(APPEND CACAlib_LIBRARIES
+				${OPENGL_LIBRARIES}
+				${OPENGL_GLUT_LIBRARY}
+			)
+		endif()
 	endif()
 endif()
 
@@ -82,8 +100,11 @@ set(CACAlib_sources
 	${CACAlib_src}
 )
 
-include_directories(./)
-add_definitions(-DCACAlib_EXPORTS)
+include_directories(
+	./
+	${CMAKE_CURRENT_BINARY_DIR}
+)
+add_definitions(-DCACAlib_EXPORTS -D__LIBCACA__)
 
 #set(CACAlib_version_script CACAlib.version)
 
@@ -109,7 +130,7 @@ set_target_properties(CACAlib
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
-#configure_file(zmq.lua zmq.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
 
 target_link_libraries (CACAlib
 	${CACAlib_LIBRARIES}
