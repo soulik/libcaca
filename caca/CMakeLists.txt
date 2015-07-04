@@ -52,13 +52,6 @@ set(CACAlib_src
     caca_types.h
 )
 
-if (WIN32)
-	list(APPEND CACAlib_src
-		../win32/config.h
-	)
-	include_directories(../win32)
-endif()
-
 if (X11_X11_LIB)
 	set(USE_X11 ON CACHE BOOL "Enable support for X11 video driver")
 	if (USE_X11)
@@ -123,14 +116,21 @@ add_library(CACAlib SHARED
 set_property(TARGET CACAlib PROPERTY CXX_STANDARD 11)
 set_property(TARGET CACAlib PROPERTY CXX_STANDARD_REQUIRED ON)
 
+if (WIN32)
+	list(APPEND CACAlib_src
+		../win32/config.h
+	)
+	include_directories(../win32)
+else()
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
+endif()
+
 set_target_properties(CACAlib
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
 
 target_link_libraries (CACAlib
 	${CACAlib_LIBRARIES}
