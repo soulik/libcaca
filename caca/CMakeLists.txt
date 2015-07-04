@@ -97,6 +97,7 @@ include_directories(
 	./
 	${CMAKE_CURRENT_BINARY_DIR}
 )
+
 add_definitions(-DCACAlib_EXPORTS -D__LIBCACA__)
 
 #set(CACAlib_version_script CACAlib.version)
@@ -121,6 +122,7 @@ if (WIN32)
 		../win32/config.h
 	)
 	include_directories(../win32)
+	add_definitions(-DDLL_EXPORT)
 else()
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
 endif()
